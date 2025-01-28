@@ -1,6 +1,7 @@
 const express = require('express');
 const User = require('../db/models/userSchema');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 module.exports.signup = async (req, res) => {
   try {
@@ -33,7 +34,26 @@ module.exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email: email });
-    if (user) {
+    if (!user || !password) {
+      return res
+        .status(404)
+        .json({ message: 'email or password is incorrect' });
+    } else {
+      const match = await bcrypt.compare(password, user.password);
+      console.log(match);
+      if (!match) {
+        return res
+          .status(404)
+          .json({ error: true, message: 'email or password incorrect' });
+      }
+      const Token = jwt.sign(
+        { id: user._id, role: user.role },
+        process.env.SECRET_KEY,
+        { expiresIn: '7D' }
+      );
+      res.status(200).json({ message: 'you are login ', token: Token });
     }
-  } catch (error) {}
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
 };
