@@ -2,6 +2,7 @@ const express = require('express');
 const db = require('./src/db/db');
 const app = express();
 const env = require('dotenv');
+const cors = require('cors');
 
 //config env
 env.config({ path: './.env' });
@@ -10,6 +11,7 @@ env.config({ path: './.env' });
 const routes = require('./src/Routes');
 
 //middlewares
+app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
