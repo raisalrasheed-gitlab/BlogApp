@@ -28,7 +28,8 @@ module.exports.deletePost = async (req, res) => {
 };
 module.exports.getAllPublicPost = async (req, res) => {
   try {
-    const post = await Post.find({ isPublic: true });
+    const { id } = req.params;
+    const post = await Post.find({ isPublic: true }).limit(6).skip(id);
     res.status(200).json(post);
   } catch (error) {
     res.status(404).json({ message: error.message });

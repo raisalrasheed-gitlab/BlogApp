@@ -3,7 +3,7 @@ import NavButton from '../NavButton/navbutton';
 import { FaBlog } from 'react-icons/fa6';
 import { useState } from 'react';
 import { Button } from '@material-tailwind/react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, NavLink } from 'react-router-dom';
 const Navbar = () => {
   const [check, setCheck] = useState(true);
   const navigate = useNavigate();
@@ -22,14 +22,16 @@ const Navbar = () => {
             }`}
           >
             <ul className=" flex flex-col md:flex-row md:gap-12 gap-16  text-base font-semibold leading-4 text-gray-700  cursor-pointer ">
-              <li className="flex items-center hover:text-gray-900">Home</li>
-              <li className="flex gap-2 items-center hover:text-gray-900">
-                My Blogs
+              <li className="flex items-center hover:text-gray-900 border-r-2 pr-2 ">
+                <NavLink to="/user/home">Home</NavLink>
               </li>
-              <li className="flex gap-2 items-center hover:text-gray-900">
+              <li className="flex gap-2 items-center hover:text-gray-900 border-r-2 pr-2">
+                <NavLink to="/user/myblog">My Blogs</NavLink>
+              </li>
+              <li className="flex gap-2 items-center hover:text-gray-900 border-r-2 pr-2">
                 About
               </li>
-              <li className="flex items-center hover:text-gray-900">
+              <li className="flex items-center hover:text-gray-900 border-r-2 pr-2">
                 Help Center
               </li>
               <li className="sm:hidden">

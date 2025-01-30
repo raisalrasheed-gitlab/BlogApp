@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.post('/:id', addPost);
 router.delete('/:id', deletePost);
-router.get('/', getAllPublicPost);
+router.get('/all/:id', getAllPublicPost);
 router.get('/:id', getPostByAuthor);
 
 module.exports = router;
