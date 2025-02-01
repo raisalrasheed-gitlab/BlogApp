@@ -10,7 +10,7 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="bg-white h-20  flex  justify-between items-center lg:px-16 px-8  md:border-b-2 border-gray-300 z-1 top-0 sticky">
+      <div className="bg-white h-20  flex  justify-between items-center lg:px-16 px-8  md:border-b-2 border-gray-300 z-2 top-0 sticky">
         <div className="flex gap-10 items-center">
           <div className="flex gap-2">
             <FaBlog className="text-4xl text-fuchsia-700" />

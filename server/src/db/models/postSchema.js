@@ -15,7 +15,7 @@ const postSchema = Schema(
     },
     isPublic: { type: Boolean, default: true },
   },
-  { timeStamps: true }
+  { timestamps: true }
 );
 const Post = model('posts', postSchema);
 module.exports = Post;

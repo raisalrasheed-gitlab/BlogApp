@@ -2,6 +2,7 @@ const express = require('express');
 const User = require('../db/models/userSchema');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { model } = require('mongoose');
 
 module.exports.signup = async (req, res) => {
   try {
@@ -10,9 +11,9 @@ module.exports.signup = async (req, res) => {
     const user = await User.findOne({ email: email });
 
     if (user) {
-      return res.status(404).json({ message: 'User is already exist' });
-    } else if (password != conformPassword) {
-      return res.status(404).json({ message: 'password incorrect' });
+      return res
+        .status(404)
+        .json({ error: true, message: 'User is already exist' });
     } else {
       const hashedPassword = await bcrypt.hash(password, 4);
       console.log(hashedPassword);
@@ -24,10 +25,12 @@ module.exports.signup = async (req, res) => {
         age: age,
         image: image,
       });
-      res.status(201).json({ message: 'Account has been created' });
+      res
+        .status(201)
+        .json({ error: false, message: 'Account has been created' });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ error: true, message: error.message });
   }
 };
 module.exports.login = async (req, res) => {
@@ -51,9 +54,21 @@ module.exports.login = async (req, res) => {
         process.env.SECRET_KEY,
         { expiresIn: '7D' }
       );
-      res.status(200).json({ message: 'you are login ', token: Token });
+      res
+        .status(200)
+        .json({ message: 'you are login ', token: Token, id: user._id });
     }
   } catch (error) {
     return res.status(500).json({ message: error.message });
+  }
+};
+module.exports.getUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const user = await User.findOne({ _id: id });
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
   }
 };

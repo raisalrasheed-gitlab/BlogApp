@@ -15,54 +15,20 @@ import { FcDislike } from 'react-icons/fc';
 import { FcLike } from 'react-icons/fc';
 import { useState } from 'react';
 import { useContext } from 'react';
-import { Userpost } from '../../Context/post-Context';
+import { Singlepost } from '../../Context/post-Context';
 import moment from 'moment';
 
-const MyBlogCard = ({ modify = true, onDelete }) => {
+const MyBlogCard = ({ modify = true }) => {
   const [like, setLike] = useState(false);
   const [comment, setComment] = useState(false);
-  const { post } = useContext(Userpost);
-  const [alert, setAlert] = useState(false);
+  const { post } = useContext(Singlepost);
 
   return (
-    <Card className="2xl:w-[35rem] sm:w-[25rem] w-[15rem] overflow-hidden border-t-2 border-gray-200 mb-10">
+    <Card className="max-w-[35rem] overflow-hidden border-t-2 border-gray-200 mb-10">
       {modify ? (
         <div className="flex justify-end p-2 gap-3 ">
           <FaEdit className="text-2xl text-blue-500" />
-          <MdDelete
-            className="text-2xl text-red-500"
-            onClick={() => {
-              setAlert(true);
-            }}
-          />
-        </div>
-      ) : (
-        ''
-      )}
-      {alert ? (
-        <div className="bg-gray-600 w-80 h-40 z-1 absolute text-white top-10 right-2 rounded-xl">
-          <p className="text-white text-xl p-10 text-center">
-            Do you want to delete ?
-          </p>
-          <div className="flex justify-center gap-5">
-            <button
-              className="bg-green-600 p-1 rounded-lg px-2"
-              onClick={() => {
-                setAlert(false);
-              }}
-            >
-              Cancel
-            </button>
-            <button
-              className="bg-red-700 p-1 rounded-lg px-2"
-              onClick={() => {
-                onDelete(post._id);
-                setAlert(false);
-              }}
-            >
-              Conform
-            </button>
-          </div>
+          <MdDelete className="text-2xl text-red-500" />
         </div>
       ) : (
         ''
@@ -73,11 +39,7 @@ const MyBlogCard = ({ modify = true, onDelete }) => {
         color="transparent"
         className="m-0 rounded-none"
       >
-        <img
-          src={post.image}
-          className="sm:min-h-60 sm:max-h-90 w-full"
-          alt="Uplod no image"
-        />
+        <img src={post.image} alt="ui/ux review check" />
       </CardHeader>
       <CardBody>
         <div className="flex items-center justify-between">
@@ -99,11 +61,12 @@ const MyBlogCard = ({ modify = true, onDelete }) => {
           </div>
         </div>
 
-        <Typography variant="lead" color="gray" className="mt-3 font-normal">
+        <Typography variant="lead" color="gray" className="mt-3 font-normal ">
           {post.content}
         </Typography>
+        {/* <div className="max-w-50">{post.content}</div> */}
       </CardBody>
-      <CardFooter className="flex items-center justify-around bg-gray-200   text-white h-10 cursor-pointer">
+      <CardFooter className="flex items-center justify-around bg-gray-400   text-white h-10 cursor-pointer">
         <div
           className="flex flex-col cursor-pointer"
           onClick={() => {

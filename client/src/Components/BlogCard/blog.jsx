@@ -6,24 +6,27 @@ import {
   Button,
 } from '@material-tailwind/react';
 import { Textarea, IconButton, Avatar } from '@material-tailwind/react';
-
+import { useNavigate } from 'react-router-dom';
 import { FcDislike } from 'react-icons/fc';
 import { FcLike } from 'react-icons/fc';
 import { useState } from 'react';
+import { Publicposts } from '../../Context/post-Context';
+import { useContext } from 'react';
 
-const Blog = ({ title, img, content }) => {
+const Blog = () => {
   const [like, setLike] = useState(false);
-
+  const { items } = useContext(Publicposts);
+  const navigate = useNavigate();
   return (
     <>
-      <Card className="w-full lg:max-w-md flex-row h-68 pr-2">
+      <Card className="w-full lg:max-w-md flex-row h-68 pr-2 cursor-pointer">
         <CardHeader
           shadow={false}
           floated={false}
           className="m-0 w-2/5 shrink-0 rounded-r-none"
         >
           <img
-            src={img}
+            src={items.image}
             alt="card-image"
             className="h-full w-full object-cover"
           />
@@ -34,20 +37,23 @@ const Blog = ({ title, img, content }) => {
             color="gray"
             className="mb-2 uppercase border-b-2 w-fit"
           >
-            {title}
+            {items.title}
           </Typography>
           <Typography
             variant="h4"
             color="blue-gray"
-            className="mb-2 text-base overflow-hidden h-25"
+            className="mb-2 text-base overflow-hidden h-25 w-55"
           >
-            {content}
+            {items.content}
           </Typography>
           <div className="flex gap-4">
-            <a href="#" className="inline-block">
+            <div className="inline-block">
               <Button
                 variant="text"
                 className="flex items-center sm:gap-2 bg-blue-400 h-10 "
+                onClick={() => {
+                  navigate(`/user/seemore/${items._id}`);
+                }}
               >
                 See More
                 <svg
@@ -65,7 +71,7 @@ const Blog = ({ title, img, content }) => {
                   />
                 </svg>
               </Button>
-            </a>
+            </div>
             <div
               className="flex flex-col cursor-pointer"
               onClick={() => {
@@ -83,8 +89,7 @@ const Blog = ({ title, img, content }) => {
             <div className="flex flex-col gap-6">
               <div className="flex items-center gap-2">
                 <Avatar
-                  src="https://docs.material-tailwind.com/img/face-2.jpg"
-                  alt="avatar"
+                  src={items.authorDetails ? items.authorDetails.image : ''}
                   className="h-8 w-full"
                 />
                 <div></div>

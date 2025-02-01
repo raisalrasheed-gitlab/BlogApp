@@ -13,12 +13,13 @@ const UserLogin = () => {
     setCheck(false);
     setUser({ ...user, [value]: e.target.value });
   };
-  console.log(user);
+
   const onSubmit = async () => {
     try {
       const dbResponse = await axios.post('user/login', user);
       if (dbResponse && dbResponse.data && dbResponse.data.token) {
         localStorage.setItem('token', dbResponse.data.token);
+        localStorage.setItem('id', dbResponse.data.id);
         navigate('/user/home');
       }
     } catch (error) {

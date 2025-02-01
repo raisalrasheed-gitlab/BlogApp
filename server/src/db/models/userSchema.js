@@ -13,7 +13,7 @@ const userSchema = Schema(
     password: { type: String, required: true, trim: true },
     role: { type: String, default: 'USER', immutable: true },
   },
-  { timeStamps: true }
+  { timetamps: true }
 );
 
 const User = model('users', userSchema);

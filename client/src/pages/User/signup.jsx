@@ -4,6 +4,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import axios from '../../utils/axios';
 import MainNav from '../../Components/MainNavbar/main-nav';
+
 const Signup = () => {
   const [user, setUser] = useState({
     email: '',
@@ -17,13 +18,13 @@ const Signup = () => {
     setCheck(false);
     setUser({ ...user, [value]: e.target.value });
   };
-  console.log(user);
+
   const onSubmit = async () => {
     try {
-      const dbResponse = await axios.post('user/login', user);
-      if (dbResponse && dbResponse.data && dbResponse.data.token) {
-        localStorage.setItem('token', dbResponse.data.token);
-        navigate('/user/home');
+      const dbResponse = await axios.post('user/signup', user);
+      console.log(dbResponse);
+      if (dbResponse && dbResponse.data && dbResponse.data.error == true) {
+        console.log('error');
       }
     } catch (error) {
       setCheck(true);
@@ -39,7 +40,7 @@ const Signup = () => {
                 User Signup
               </div>
               <CustomInput
-                label="Name"
+                label="Name *"
                 classname="jost text-black"
                 onChange={e => onChange(e, 'name')}
               ></CustomInput>
@@ -54,12 +55,12 @@ const Signup = () => {
                 onChange={e => onChange(e, 'phoneNumber')}
               ></CustomInput>
               <CustomInput
-                label="Email"
+                label="Email *"
                 classname="jost text-black"
                 onChange={e => onChange(e, 'email')}
               ></CustomInput>
               <CustomInput
-                label="Password"
+                label="Password *"
                 type="password"
                 onChange={e => {
                   onChange(e, 'password');

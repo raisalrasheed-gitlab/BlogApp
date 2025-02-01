@@ -4,12 +4,12 @@ import Pagination from '../../Components/Pagination/pagination';
 import { useEffect, useState } from 'react';
 import axios from '../../utils/axios';
 import Footer from '../../Components/Footer/footer';
+import { Publicposts } from '../../Context/post-Context';
 
 const Home = () => {
   const [blog, setBlog] = useState([]);
   const [skip, setSkip] = useState(0);
   const [page, setPage] = useState(1);
-  console.log('len', blog.length);
   useEffect(() => {
     getBlog();
   }, [skip]);
@@ -17,7 +17,7 @@ const Home = () => {
     const blog = await axios.get(`/post/all/${skip}`);
     setBlog(blog.data);
   };
-  console.log(skip);
+  console.log(blog);
   return (
     <>
       <Navbar />
@@ -42,25 +42,23 @@ const Home = () => {
       <div className="w-11/12 min-h-[80vh] mx-auto mb-4 grid xl:grid-cols-3 lg:grid-cols-2 justify-items-center gap-y-8">
         {blog.map(items => {
           return (
-            <Blog
-              title={items.title}
-              img={items.image}
-              content={items.content}
-            />
+            <Publicposts.Provider value={{ items: items }}>
+              <Blog />
+            </Publicposts.Provider>
           );
         })}
       </div>
       <div className="flex justify-center mb-2">
         <Pagination
           onAddBtn={() => {
-            if (blog.length > 3) {
-              setSkip(skip + 4);
+            if (blog.length > 5) {
+              setSkip(skip + 6);
               setPage(page + 1);
             }
           }}
           onSubBtn={() => {
             if (page != 1) {
-              setSkip(skip - 4);
+              setSkip(skip - 6);
               setPage(page - 1);
             }
           }}
