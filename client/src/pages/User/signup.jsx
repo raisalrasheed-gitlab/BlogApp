@@ -1,4 +1,4 @@
-import CustomInput from '../../components/Input/custom-input.jsx';
+import CustomInput1 from '../../Components/Input/input.jsx';
 import { Button } from '@material-tailwind/react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
@@ -43,21 +43,21 @@ const Signup = () => {
               <div className="text-center jost text-2xl font-bold text-orange-400 ">
                 User Signup
               </div>
-              <CustomInput
+              <CustomInput1
                 label="Name *"
                 classname="jost text-black"
                 onChange={e => onChange(e, 'name')}
-              ></CustomInput>
-              <CustomInput
+              ></CustomInput1>
+              <CustomInput1
                 label="Age"
                 classname="jost text-black"
                 onChange={e => onChange(e, 'age')}
-              ></CustomInput>
-              <CustomInput
+              ></CustomInput1>
+              <CustomInput1
                 label="Phone Number"
                 classname="jost text-black"
                 onChange={e => onChange(e, 'phoneNumber')}
-              ></CustomInput>
+              ></CustomInput1>
               <CustomInput
                 label="Email *"
                 classname="jost text-black"
