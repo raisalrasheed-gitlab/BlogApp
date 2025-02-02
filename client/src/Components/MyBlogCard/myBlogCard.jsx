@@ -13,8 +13,8 @@ import { MdDelete } from 'react-icons/md';
 import { LiaCommentSolid } from 'react-icons/lia';
 import { FcDislike } from 'react-icons/fc';
 import { FcLike } from 'react-icons/fc';
-import { useState } from 'react';
-import { useContext } from 'react';
+import { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Userpost } from '../../Context/post-Context';
 import moment from 'moment';
 
@@ -23,12 +23,20 @@ const MyBlogCard = ({ modify = true, onDelete }) => {
   const [comment, setComment] = useState(false);
   const { post } = useContext(Userpost);
   const [alert, setAlert] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <Card className="2xl:w-[35rem] sm:w-[25rem] w-[15rem] overflow-hidden border-t-2 border-gray-200 mb-10">
       {modify ? (
-        <div className="flex justify-end p-2 gap-3 ">
-          <FaEdit className="text-2xl text-blue-500" />
+        <div className="flex justify-end p-2 gap-3 items-center font-bold cursor-pointer ">
+          Edit
+          <FaEdit
+            className="text-2xl text-blue-500"
+            onClick={() => {
+              navigate(`/user/edit/${post._id}`);
+            }}
+          />
+          Delete
           <MdDelete
             className="text-2xl text-red-500"
             onClick={() => {

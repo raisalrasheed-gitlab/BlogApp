@@ -13,15 +13,31 @@ import { MdDelete } from 'react-icons/md';
 import { LiaCommentSolid } from 'react-icons/lia';
 import { FcDislike } from 'react-icons/fc';
 import { FcLike } from 'react-icons/fc';
-import { useState } from 'react';
-import { useContext } from 'react';
+import { useState, useContext } from 'react';
 import { Singlepost } from '../../Context/post-Context';
+import axios from '../../utils/axios';
 import moment from 'moment';
 
 const MyBlogCard = ({ modify = true }) => {
   const [like, setLike] = useState(false);
-  const [comment, setComment] = useState(false);
+  const [commentsec, setCommentsec] = useState(false);
+  const [comment, setComment] = useState([]);
+  const [addComment, setAddComment] = useState({ comment: '' });
   const { post } = useContext(Singlepost);
+  const pId = post._id;
+
+  const getComment = async () => {
+    const comment = await axios.get(`/comment/${pId}`);
+    setComment(comment.data);
+  };
+  const onSubmit = async () => {
+    const dbResponse = await axios.post(
+      `/comment/${post._id}/${localStorage.getItem('id')}`,
+      addComment
+    );
+    console.log(dbResponse);
+    getComment();
+  };
 
   return (
     <Card className="max-w-[35rem] overflow-hidden border-t-2 border-gray-200 mb-10">
@@ -64,7 +80,6 @@ const MyBlogCard = ({ modify = true }) => {
         <Typography variant="lead" color="gray" className="mt-3 font-normal ">
           {post.content}
         </Typography>
-        {/* <div className="max-w-50">{post.content}</div> */}
       </CardBody>
       <CardFooter className="flex items-center justify-around bg-gray-400   text-white h-10 cursor-pointer">
         <div
@@ -83,44 +98,41 @@ const MyBlogCard = ({ modify = true }) => {
         <div
           className="flex items-center gap-3 text-black font-semibold bg-white p-2 rounded-xl px-5 "
           onClick={() => {
-            setComment(!comment);
+            setCommentsec(!commentsec);
+            getComment(post._id);
           }}
         >
           <LiaCommentSolid className=" text-2xl" />
           Comments
         </div>
       </CardFooter>
-      {comment ? (
+      {commentsec ? (
         <div className=" w-full h-35 grid justify-items-center overflow-scroll bg-gray-300">
-          <div className="w-4/6 border-2 h-15 mt-2 rounded-3xl ">
-            <div className=" pl-3 pt-1 flex gap-2">
-              <Avatar
-                className="w-8 h-8 "
-                src="https://docs.material-tailwind.com/img/face-2.jpg"
-                alt="avatar"
-              />
-              <div>
-                <div className="flex gap-5">
-                  <h2>surname</h2>
-                  <h2>date</h2>
+          {comment.map(item => {
+            return (
+              <div className="w-4/6 border-2 h-15 mt-2 pb-1 rounded-3xl ">
+                <div className=" pl-3 pt-1 flex gap-2">
+                  <Avatar
+                    className="w-8 h-8 border-2 border-green-400"
+                    src={item.authorDetails.image}
+                    alt="avatar"
+                  />
+                  <div>
+                    <div className="flex gap-5">
+                      <h2>{item.authorDetails.name}</h2>
+                      <h2>
+                        {moment(
+                          item.createdAt,
+                          moment.HTML5_FMT.DATETIME_LOCAL_MS
+                        ).format('DD-MM-YY')}
+                      </h2>
+                    </div>
+                    <h2 className="font-semibold">{item.comment}</h2>
+                  </div>
                 </div>
-                <h2 className="font-semibold">hellow this a good post</h2>
               </div>
-            </div>
-          </div>
-          <div className="w-4/6 border-2 h-15 mt-2 rounded-3xl">
-            <div className=" pl-3 pt-1 flex gap-2">
-              <Avatar
-                className="w-8 h-8 "
-                src="https://docs.material-tailwind.com/img/face-2.jpg"
-                alt="avatar"
-              />
-              <div>
-                <p>surname</p>
-                <h2 className="  font-semibold">hellow this a good post</h2>
-              </div>
-            </div>
-          </div>
+            );
+          })}
         </div>
       ) : (
         ''
@@ -129,8 +141,15 @@ const MyBlogCard = ({ modify = true }) => {
         <input
           className="h-10 border-2 focus:border-purple-700 w-full rounded-2xl pl-5"
           placeholder="Add Your Comments"
+          maxLength="30"
+          onChange={e => {
+            setAddComment({ ...addComment, comment: e.target.value });
+          }}
         ></input>
-        <button className="h-10 bg-green-600 w-2/6 rounded-2xl text-white">
+        <button
+          className="h-10 bg-green-600 w-2/6 rounded-2xl text-white"
+          onClick={onSubmit}
+        >
           Submit
         </button>
       </div>

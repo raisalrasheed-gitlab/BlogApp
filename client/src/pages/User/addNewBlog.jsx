@@ -1,11 +1,17 @@
 import Navbar from '../../Components/Navbar/navbar';
 import Footer from '../../Components/Footer/footer';
 import { Textarea } from '@material-tailwind/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from '../../utils/axios';
-import { useNavigate } from 'react-router-dom';
+import { Await, useNavigate, useParams } from 'react-router-dom';
 
 const AddNewBlog = () => {
+  useEffect(() => {
+    if (Pid) getPost();
+  }, []);
+  const id = localStorage.getItem('id');
+  const { Pid } = useParams();
+
   const navigate = useNavigate();
   const [blog, setBlog] = useState({
     image: '',
@@ -13,7 +19,11 @@ const AddNewBlog = () => {
     content: '',
     isPublic: true,
   });
-  const id = localStorage.getItem('id');
+
+  const getPost = async () => {
+    const post = await axios.get(`/post/${Pid}`);
+    setBlog(post.data[0]);
+  };
   const onChange = (e, key) => {
     if ([key] == 'isPublic') {
       setBlog({ ...blog, [key]: e.target.checked });
@@ -29,14 +39,20 @@ const AddNewBlog = () => {
     const dbResponse = await axios.post(`/post/${id}`, blog);
     navigate('/user/myblog');
   };
-  console.log(blog);
+  const onEdit = async () => {
+    const dbResponse = await axios.patch(`/post/${Pid}`, blog);
+    console.log(dbResponse);
+    navigate('/user/myblog');
+  };
   return (
     <>
       <Navbar />
       <div className=" jost flex items-center justify-center min-h-[90vh]">
         <div className="xl:flex grid mb-5 gap-10 w-10/12 border-t-2 min-h-[70vh] px-10 py-10 rounded-2xl bg-white shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)]">
           <div className="sm:text-2xl font-bold text-center sm:border-r-3  xl:pr-4 border-gray-600 flex flex-col justify-center">
-            <h2 className="text:xl underline"> Add New Blog Section</h2>
+            <h2 className="text:xl underline">
+              {Pid ? 'Edit Blog Section' : 'Add New Blog Section'}
+            </h2>
           </div>
           <div className=" grid gap-10 items-center">
             <div className="flex gap-5 md:flex-row flex-col">
@@ -63,6 +79,7 @@ const AddNewBlog = () => {
               </div>
               <div class="md:w-full max-w-sm min-w-[200px]">
                 <input
+                  value={blog.title}
                   onChange={e => {
                     onChange(e, 'title');
                   }}
@@ -82,7 +99,7 @@ const AddNewBlog = () => {
                     onChange={e => {
                       onChange(e, 'isPublic');
                     }}
-                    defaultChecked="true"
+                    defaultChecked={Pid ? blog.isPublic : true}
                     id="switch-component"
                     type="checkbox"
                     class="peer appearance-none w-11 h-5 bg-green-700 rounded-full checked:bg-red-500 cursor-pointer transition-colors duration-300"
@@ -99,6 +116,7 @@ const AddNewBlog = () => {
               <h2 className="pr-2 text-base sm:text-xl font-medium">Content</h2>
               <div className="xl:w-96">
                 <Textarea
+                  value={blog.content}
                   label="Blog Content"
                   maxLength="500"
                   onChange={e => {
@@ -118,7 +136,9 @@ const AddNewBlog = () => {
               </button>
               <button
                 className="bg-green-600  hover:text-black text-white text-xl p-2 rounded-xl px-4 sm:w-40 sm:h-12"
-                onClick={onSubmit}
+                onClick={() => {
+                  Pid ? onEdit() : onSubmit();
+                }}
               >
                 Submit
               </button>

@@ -82,3 +82,35 @@ module.exports.getPostByAuthor = async (req, res) => {
     res.status(404).json({ message: error.message });
   }
 };
+
+module.exports.editById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { body } = req;
+    const post = await Post.findByIdAndUpdate(id, body);
+    res.status(200).json({ message: 'updation successfully' });
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
+module.exports.addLike = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { update } = req.body;
+    console.log(update);
+    const post = await Post.findByIdAndUpdate(id, { like: update });
+    res.status(200).json({ message: 'Like added Successfully' });
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+module.exports.getLike = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const dbResponse = await Post.findOne({ _id: id }).select('like');
+    res.status(200).json(dbResponse);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};

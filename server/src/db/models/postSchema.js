@@ -13,6 +13,7 @@ const postSchema = Schema(
       ref: 'users',
       required: true,
     },
+    like: { type: Number, default: 0 },
     isPublic: { type: Boolean, default: true },
   },
   { timestamps: true }

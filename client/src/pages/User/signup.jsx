@@ -11,6 +11,7 @@ const Signup = () => {
     password: '',
     name: '',
     age: '',
+    image: '',
   });
   const navigate = useNavigate();
   const [check, setCheck] = useState(false);
@@ -18,14 +19,18 @@ const Signup = () => {
     setCheck(false);
     setUser({ ...user, [value]: e.target.value });
   };
-
+  const onImage = async e => {
+    const formData = new FormData();
+    formData.append('image', e.target.files[0]);
+    const dbResponse = await axios.post('/image/upload', formData);
+    setUser({ ...user, image: dbResponse.data.url });
+  };
+  console.log(user);
   const onSubmit = async () => {
     try {
       const dbResponse = await axios.post('user/signup', user);
       console.log(dbResponse);
-      if (dbResponse && dbResponse.data && dbResponse.data.error == true) {
-        console.log('error');
-      }
+      navigate('/');
     } catch (error) {
       setCheck(true);
     }
@@ -66,6 +71,11 @@ const Signup = () => {
                   onChange(e, 'password');
                 }}
               ></CustomInput>
+              <CustomInput
+                label="Image"
+                type="file"
+                onChange={e => onImage(e)}
+              />
               {check ? (
                 <p className=" text-center">
                   Please Check Email or Password !!

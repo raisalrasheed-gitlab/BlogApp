@@ -44,8 +44,13 @@ const Navbar = () => {
           </div>
         </div>
         <div className="flex gap-5 items-center  ">
-          <a href="" className="hidden sm:block">
-            <CgProfile className="text-4xl" />
+          <a className="hidden sm:block">
+            <CgProfile
+              className="text-4xl"
+              onClick={() => {
+                navigate('/user/edit');
+              }}
+            />
           </a>
           <Button
             className="bg-red-500  hidden sm:block normal-case  "

@@ -9,14 +9,27 @@ import { Textarea, IconButton, Avatar } from '@material-tailwind/react';
 import { useNavigate } from 'react-router-dom';
 import { FcDislike } from 'react-icons/fc';
 import { FcLike } from 'react-icons/fc';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Publicposts } from '../../Context/post-Context';
 import { useContext } from 'react';
+import axios from '../../utils/axios';
 
 const Blog = () => {
   const [like, setLike] = useState(false);
+  const [num, setNum] = useState({ like });
   const { items } = useContext(Publicposts);
+  const [comment, setComment] = useState({ comment: '' });
   const navigate = useNavigate();
+
+  const onLike = async update => {};
+  const onSubmit = async () => {
+    const dbResponse = await axios.post(
+      `/comment/${items._id}/${localStorage.getItem('id')}`,
+      comment
+    );
+    setComment({ comment: '' });
+  };
+  console.log(comment);
   return (
     <>
       <Card className="w-full lg:max-w-md flex-row h-68 pr-2 cursor-pointer">
@@ -83,7 +96,9 @@ const Blog = () => {
               ) : (
                 <FcLike className="text-2xl" />
               )}
-              <p className="text-xs text-center font-semibold text-black">23</p>
+              <p className="text-xs text-center font-semibold text-black">
+                {num.like}
+              </p>
             </div>
 
             <div className="flex flex-col gap-6">
@@ -99,6 +114,11 @@ const Blog = () => {
           <div className="sm:flex items-center mt-2 hidden">
             <div className="flex w-full h-10 flex-row items-center rounded-[99px] border border-gray-900/10 bg-gray-900/5 ">
               <Textarea
+                value={comment.comment}
+                maxLength={30}
+                onChange={e => {
+                  setComment({ comment: e.target.value });
+                }}
                 rows={1}
                 resize={true}
                 placeholder="Your Comments"
@@ -111,7 +131,11 @@ const Blog = () => {
                 }}
               />
               <div>
-                <IconButton variant="text" className="rounded-full">
+                <IconButton
+                  variant="text"
+                  className="rounded-full"
+                  onClick={onSubmit}
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
