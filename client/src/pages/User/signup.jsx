@@ -1,9 +1,8 @@
-import CustomInput from '../../components/Input/custom-input';
+import CustomInput from '../../components/Input/custom-input.jsx';
 import { Button } from '@material-tailwind/react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import axios from '../../utils/axios';
-import MainNav from '../../Components/MainNavbar/main-nav';
 
 const Signup = () => {
   const [user, setUser] = useState({
