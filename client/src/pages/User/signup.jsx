@@ -63,14 +63,14 @@ const Signup = () => {
                 classname="jost text-black"
                 onChange={e => onChange(e, 'email')}
               ></CustomInput>
-              <CustomInput
+              <CustomInput1
                 label="Password *"
                 type="password"
                 onChange={e => {
                   onChange(e, 'password');
                 }}
-              ></CustomInput>
-              <CustomInput
+              ></CustomInput1>
+              <CustomInput1
                 label="Image"
                 type="file"
                 onChange={e => onImage(e)}
