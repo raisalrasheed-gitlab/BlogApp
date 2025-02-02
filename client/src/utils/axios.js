@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'https://blog-app-x2vy.vercel.app/',
+  baseURL: 'http://localhost:9001',
 });
 
 export default axiosInstance;

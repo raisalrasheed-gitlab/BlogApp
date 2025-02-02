@@ -11,7 +11,7 @@ env.config({ path: './.env' });
 const routes = require('./src/Routes');
 
 //middlewares
-app.use(cors({ origin: 'https://blog-app-ochre-rho.vercel.app' }));
+app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
