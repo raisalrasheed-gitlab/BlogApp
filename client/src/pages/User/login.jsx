@@ -1,4 +1,4 @@
-import CustomInput from '../../components/Input/custom-input';
+import CustomInput from '../../Components/Input/input';
 import { Button } from '@material-tailwind/react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
