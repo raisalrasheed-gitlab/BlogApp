@@ -9,16 +9,16 @@ const {
   addLike,
   getLike,
 } = require('../controller/post-control');
-
+const checkToken = require('../middlewares/check-token');
 const router = express.Router();
 
-router.post('/:id', addPost);
-router.delete('/:id', deletePost);
-router.get('/:id', getPostById);
-router.get('/all/:id', getAllPublicPost);
-router.get('/author/:id', getPostByAuthor);
-router.patch('/:id', editById);
-router.put('/like/:id', addLike);
-router.get('/like/:id', getLike);
+router.post('/:id', checkToken(['USER']), addPost);
+router.delete('/:id', checkToken(['USER']), deletePost);
+router.get('/:id', checkToken(['USER']), getPostById);
+router.get('/all/:id', checkToken(['USER']), getAllPublicPost);
+router.get('/author/:id', checkToken(['USER']), getPostByAuthor);
+router.patch('/:id', checkToken(['USER']), editById);
+router.put('/like/:id', checkToken(['USER']), addLike);
+router.get('/like/:id', checkToken(['USER']), getLike);
 
 module.exports = router;
